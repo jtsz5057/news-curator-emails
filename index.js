@@ -1,6 +1,9 @@
-require ('dotenv').config();
+const dotenv = require('dotenv');
+dotenv.config();
+
 const schedule = require('node-schedule');
 const NewsAPI = require('newsapi');
+
 const newsapi = new NewsAPI(process.env.NEWS_API_KEY)
 
 const getDailyNews = async () => {
@@ -21,4 +24,17 @@ const getDailyNews = async () => {
     });
   
     return response; // response will be returned in a JSON format
+  };
+
+// generate HTML for email template
+  const generateTemplate = (news) => {
+    const newsArticles = news.articles; // An array of articles
+    let htmlTemplate = '<h1>Daily News</h1>'; // Will be initialized with the heading
+    newsArticles.forEach((article, index) => { // Loop to iterate through the array of articles
+      htmlTemplate += `<h2>${index + 1}</h2>`; // A the index of the article
+      htmlTemplate += `<h3>${article.title}</h3>`; // A the title of the article
+      htmlTemplate += `<p>${article.description}</p>`; // Then with the description of the article
+      htmlTemplate += `<a href="${article.url}">Read More</a>`; // At last, it will be appended with the url of the source.
+    }); 
+    return htmlTemplate; // Formatted HTML will be returned
   };

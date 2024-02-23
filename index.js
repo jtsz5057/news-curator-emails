@@ -1,6 +1,9 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
+const mgMail = require('');
+mgMail.setApiKey(process.env.MAILGUN_API_KEY)
+
 const schedule = require('node-schedule');
 const NewsAPI = require('newsapi');
 
@@ -38,3 +41,17 @@ const getDailyNews = async () => {
     }); 
     return htmlTemplate; // Formatted HTML will be returned
   };
+
+
+  const sendEmail = async (htmlTemplate) => {
+    const msg = {
+      to: 'jtsz0112@outlook.com', // Email address of the recipient
+      from: {
+        name: 'Jonathan Tan', // Name of the sender
+        email:'jtsz5057@gmail.com' // Email address of the sender
+      },
+      subject: 'Daily News', // Subject of the email
+      html: htmlTemplate, // htmlTemplate will be passed as the html of the email
+    };
+    await mgMail.send(msg); // Mailgun API will be used to send the email
+  }
